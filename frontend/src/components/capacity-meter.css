@@ -1,0 +1,32 @@
+.capacity-total {
+    height: 20px;
+    /* margin: 0 1em; */
+    background-color: #eee;
+    border: 1px solid #ccc;
+    position: relative;
+}
+
+.capacity-total .capacity-percentage {
+    height: 100%;
+}
+
+.low-capacity {
+    /* background-color: #2a9d8f; */
+    background-color: #8ac926;
+}
+.medium-capacity {
+    /* background-color: #e9c46a; */
+    background-color: #ffca3a;
+}
+.high-capacity {
+    /* background-color: #e76f51; */
+    background-color: #ff595e;
+}
+
+.capacity-count {
+    font-size: 14px;
+    position: absolute;
+    top: 1px;
+    left: 10px;
+    margin: 0 auto;
+}
