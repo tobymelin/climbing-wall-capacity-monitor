@@ -19,6 +19,18 @@ class App extends React.Component {
     clearInterval(this.timerID);
   }
 
+  convertDate(epochDate) {
+    let date = new Date(epochDate);
+
+    let h = date.getHours();
+    h = (h < 10) ? '0' + h.toString() : h.toString();
+
+    let m = date.getMinutes();
+    m = (m < 10) ? '0' + m.toString() : m.toString();
+    
+    return h + ':' + m;
+  }
+
   render() {
     const walls = Object.keys(this.state.wallData).sort();
 
@@ -44,7 +56,7 @@ class App extends React.Component {
   fetchData() {
     fetch('/api/walls')
       .then(res => res.json())
-      .then(res => this.setState({ wallData: res.walls, updated: res.refreshed }));
+      .then(res => this.setState({ wallData: res.walls, updated: this.convertDate(res.refreshed) }));
   }
 }
 

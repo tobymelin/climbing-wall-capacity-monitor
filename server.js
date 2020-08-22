@@ -4,24 +4,26 @@ const fetchData = require('./fetch-data');
 const app = express();
 
 let wallData = {};
-let refreshed = new Date();
+let refreshed = Date.now();
 
 const timeString = (dateObject) => {
-    let h = dateObject.getHours();
+    let date = new Date(dateObject);
+
+    let h = date.getHours();
     h = (h < 10) ? '0' + h.toString() : h.toString();
 
-    let m = dateObject.getMinutes();
+    let m = date.getMinutes();
     m = (m < 10) ? '0' + m.toString() : m.toString();
     
     return h + ':' + m;
 };
 
 const refreshData = () => {
-    console.log('[' + timeString(new Date()) + '] Refreshing data');
+    console.log('[' + timeString(Date.now()) + '] Refreshing data');
 
     fetchData()
         .then((res) => {
-            refreshed = new Date();
+            refreshed = Date.now();
             console.log('[' + timeString(refreshed) + '] Done!');
             wallData = res;
         })
@@ -36,7 +38,7 @@ setInterval(refreshData, 1000*60*15);
 
 app.use(express.json());
 app.get('/api/walls', (req, res) => {
-    res.send({walls: wallData, refreshed: timeString(refreshed)});
+    res.send({walls: wallData, refreshed: refreshed});
 });
 
 if (!module.parent) {
