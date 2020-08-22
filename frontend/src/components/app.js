@@ -13,7 +13,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.fetchData();
-    this.timerID = setInterval(() => this.fetchData(), 1000*60*15);
+    this.timerID = setInterval(() => this.fetchData(), 1000*60*5);
   }
   componentWillUnmount() {
     clearInterval(this.timerID);
