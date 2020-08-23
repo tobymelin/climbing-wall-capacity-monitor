@@ -1,13 +1,19 @@
+// Express server used to serve up an API which returns a JSON object
+// containing the latest climber counts as provided by the
+// RockGymPro widgets.
+//
 const express = require('express');
 const fetchData = require('./fetch-data');
 
 const app = express();
 
+// Global variables used to build the JSON response
 let wallData = {};
 let refreshed = Date.now();
 
-const timeString = (dateObject) => {
-    let date = new Date(dateObject);
+// Helper function for converting an epoch date to HH:MM
+const timeString = (epochDate) => {
+    let date = new Date(epochDate);
 
     let h = date.getHours();
     h = (h < 10) ? '0' + h.toString() : h.toString();
@@ -18,6 +24,7 @@ const timeString = (dateObject) => {
     return h + ':' + m;
 };
 
+// Fetch data 
 const refreshData = () => {
     console.log('[' + timeString(Date.now()) + '] Refreshing data');
 
@@ -32,10 +39,14 @@ const refreshData = () => {
         });
 };
 
-// Instantly refresh climbing wall data and refresh every 15 minutes.
+// Instantly refresh climbing wall data on start
+// and set a timer to run refreshData() every 10 minutes.
 refreshData();
-setInterval(refreshData, 1000*60*15);
+setInterval(refreshData, 1000*60*10);
 
+// Set up the API to respond to queries to /api/walls.
+// Returns the entire list of climbing walls and the time
+// the data was last refreshed
 app.use(express.json());
 app.get('/api/walls', (req, res) => {
     res.send({walls: wallData, refreshed: refreshed});

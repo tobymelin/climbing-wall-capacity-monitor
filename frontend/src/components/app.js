@@ -11,6 +11,8 @@ class App extends React.Component {
     this.state = { wallData: {}, updated: '-' };
   }
 
+  // Once component has mounted, fetch data from the API and
+  // set a timer which refreshes the data every 5 minutes
   componentDidMount() {
     this.fetchData();
     this.timerID = setInterval(() => this.fetchData(), 1000*60*5);
@@ -19,6 +21,7 @@ class App extends React.Component {
     clearInterval(this.timerID);
   }
 
+  // Helper function for converting an epoch date to HH:MM
   convertDate(epochDate) {
     let date = new Date(epochDate);
 
@@ -34,6 +37,7 @@ class App extends React.Component {
   render() {
     const walls = Object.keys(this.state.wallData).sort();
 
+    // Set up a separate Card + CapacityMeter for each climbing wall
     let cards = walls.map((wall) => {
       return (
         <Card label={wall}>
@@ -45,7 +49,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>London Climbing Wall Capacity</h1>
-        <p>Last updated: {this.state.updated}<br/>(Data updates every 15 minutes)</p>
+        <p>Last updated: {this.state.updated}<br/>(Data updates every 10 minutes)</p>
         <div className="content">{cards}</div>
         <div className="notes">
           <p><strong>NOTE:</strong> Numbers are as provided by the climbing walls. Depending on check-in/out procedures, this may not be the exact number of climbers at the wall.</p>
@@ -55,6 +59,9 @@ class App extends React.Component {
     );
   }
 
+  // Fetch data from the API and update the component's state
+  // to include the latest data + last refresh time as defined in
+  // the JSON object
   fetchData() {
     fetch('/api/walls')
       .then(res => res.json())
