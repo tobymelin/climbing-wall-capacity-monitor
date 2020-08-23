@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -9,6 +9,16 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
+}
+
+.notes {
+  font-size: 0.9em;
+}
+
+@media screen and (min-width: 600px) and (max-width: 1000px) {
+  .App > p, .notes {
+    font-size: 0.65em;
+  }
 }
 
 .App-header {

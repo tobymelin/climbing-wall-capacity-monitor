@@ -47,8 +47,10 @@ class App extends React.Component {
         <h1>London Climbing Wall Capacity</h1>
         <p>Last updated: {this.state.updated}<br/>(Data updates every 15 minutes)</p>
         <div className="content">{cards}</div>
-        <p><strong>NOTE:</strong> Numbers are as provided by the climbing walls. Depending on check-in/out procedures, this may not be the exact number of climbers at the wall.</p>
-        <p><strong>NOTE 2:</strong> This list only includes London-based climbing walls which make their climber counts publicly available.</p>
+        <div className="notes">
+          <p><strong>NOTE:</strong> Numbers are as provided by the climbing walls. Depending on check-in/out procedures, this may not be the exact number of climbers at the wall.</p>
+          <p><strong>NOTE 2:</strong> This list only includes London-based climbing walls which make their climber counts publicly available.</p>
+        </div>
       </div>
     );
   }
