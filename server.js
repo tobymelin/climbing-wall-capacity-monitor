@@ -56,7 +56,7 @@ app.get('/api/walls', (req, res) => {
         console.log('[' + timeString(Date.now()) + '] ' + hitCounter + ' page hits')
     }
 
-    res.send({walls: wallData, refreshed: refreshed});
+    res.send({walls: wallData, refreshed});
 });
 
 if (!module.parent) {
