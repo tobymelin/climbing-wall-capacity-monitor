@@ -10,6 +10,7 @@ const app = express();
 // Global variables used to build the JSON response
 let wallData = {};
 let refreshed = Date.now();
+let hitCounter = 0;
 
 // Helper function for converting an epoch date to HH:MM
 const timeString = (epochDate) => {
@@ -49,6 +50,12 @@ setInterval(refreshData, 1000*60*10);
 // the data was last refreshed
 app.use(express.json());
 app.get('/api/walls', (req, res) => {
+    // Super simple hit tracker out of curiosity
+    hitCounter += 1;
+    if (hitCounter % 10) { 
+        console.log('[' + timeString(Date.now()) + '] ' + hitCounter + ' page hits')
+    }
+
     res.send({walls: wallData, refreshed: refreshed});
 });
 
