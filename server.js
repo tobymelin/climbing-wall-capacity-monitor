@@ -52,7 +52,7 @@ app.use(express.json());
 app.get('/api/walls', (req, res) => {
     // Super simple hit tracker out of curiosity
     hitCounter += 1;
-    if (hitCounter % 10) { 
+    if (hitCounter % 10 == 0) { 
         console.log('[' + timeString(Date.now()) + '] ' + hitCounter + ' page hits')
     }
 
