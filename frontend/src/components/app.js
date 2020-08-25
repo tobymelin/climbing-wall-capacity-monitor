@@ -36,6 +36,7 @@ class App extends React.Component {
 
   render() {
     const walls = Object.keys(this.state.wallData).sort();
+    let lastUpdatedMessage;
 
     // Set up a separate Card + CapacityMeter for each climbing wall
     let cards = walls.map((wall) => {
@@ -45,11 +46,17 @@ class App extends React.Component {
         </Card>
       );
     });
+
+    if (cards.length == 0) {
+      lastUpdatedMessage = <div className="error">No data is available at the moment</div>
+    } else {
+      lastUpdatedMessage = <p>Last updated: {this.state.updated}<br/>(Data updates every 10 minutes)</p>
+    }
   
     return (
       <div className="App">
         <h1>London Climbing Wall Capacity</h1>
-        <p>Last updated: {this.state.updated}<br/>(Data updates every 10 minutes)</p>
+        {lastUpdatedMessage}
         <div className="content">{cards}</div>
         <div className="notes">
           <p><strong>NOTE:</strong> Numbers are as provided by the climbing walls. Depending on check-in/out procedures, this may not be the exact number of climbers at the wall.</p>
