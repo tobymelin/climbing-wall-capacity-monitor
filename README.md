@@ -14,7 +14,7 @@ The back-end JSON response is in the format shown below;
 
 ```json
 {
-    walls: {
+    "walls": {
         "Wall 1": {
             "capacity": 20,
             "count": 5
@@ -24,7 +24,7 @@ The back-end JSON response is in the format shown below;
             "count": 84
         }
     },
-    refreshed: "10:00"
+    "refreshed": "10:00"
 }
 ```
 
