@@ -12,6 +12,13 @@ let wallData = {};
 let refreshed = Date.now();
 let hitCounter = 0;
 
+if (process.env.NODE_ENV == 'dev') {
+    // Refresh rate (minutes)
+    let refreshRate = 30;
+} else {
+    let refreshRate = 10;
+}
+
 // Helper function for converting an epoch date to HH:MM
 const timeString = (epochDate) => {
     let date = new Date(epochDate);
@@ -43,7 +50,7 @@ const refreshData = () => {
 // Instantly refresh climbing wall data on start
 // and set a timer to run refreshData() every 10 minutes.
 refreshData();
-setInterval(refreshData, 1000*60*10);
+setInterval(refreshData, 1000*60*refreshRate);
 
 // Set up the API to respond to queries to /api/walls.
 // Returns the entire list of climbing walls and the time
