@@ -11,12 +11,11 @@ const app = express();
 let wallData = {};
 let refreshed = Date.now();
 let hitCounter = 0;
+let refreshRate = 10;
 
-if (process.env.NODE_ENV == 'dev') {
+if (process.env.NODE_ENV == 'development') {
     // Refresh rate (minutes)
-    let refreshRate = 30;
-} else {
-    let refreshRate = 10;
+    refreshRate = 30;
 }
 
 // Helper function for converting an epoch date to HH:MM
