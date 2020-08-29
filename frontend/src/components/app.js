@@ -2,13 +2,16 @@ import React from 'react';
 import './app.css';
 import CapacityMeter from './capacity-meter.js';
 import Card from './card.js';
-
+import Favourite from './favourite.js';
+import Storage from '../helpers/storage.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { wallData: {}, updated: '-' };
+    let lsFavourites = Storage.get('favourites') || [];
+
+    this.state = { wallData: {}, updated: '-', favourites: [...lsFavourites] };
   }
 
   // Once component has mounted, fetch data from the API and
@@ -34,20 +37,68 @@ class App extends React.Component {
     return h + ':' + m;
   }
 
+  sortFunc(a, b) {
+    if (this.state.favourites.indexOf(a) !== -1 && this.state.favourites.indexOf(b) !== -1) {
+      if (a > b) {
+        return 1;
+      }
+      if (a < b) {
+        return -1;
+      }
+      return 0;
+    }
+
+    if (a < b) {
+      if (this.state.favourites.indexOf(b) !== -1) {
+        return 1;
+      }
+      return -1;
+    }
+    if (a > b) {
+      if (this.state.favourites.indexOf(a) !== -1) {
+        return -1;
+      }
+      return 1;
+    }
+
+    return 0;
+  }
+
+  setFavourite(wall) {
+    let favIndex = this.state.favourites.indexOf(wall);
+    let newFavourites = this.state.favourites;
+
+    if (favIndex === -1) {
+      newFavourites.push(wall);
+    }
+    else {
+      newFavourites.splice(favIndex, 1);
+    }
+
+    this.setState({ favourites: [...newFavourites] });
+    Storage.set('favourites', this.state.favourites);
+  }
+
   render() {
-    const walls = Object.keys(this.state.wallData).sort();
+    const walls = Object.keys(this.state.wallData).sort((a, b) => this.sortFunc(a, b));
     let lastUpdatedMessage;
 
     // Set up a separate Card + CapacityMeter for each climbing wall
     let cards = walls.map((wall) => {
+      let favouriteState = 'false';
+      if (this.state.favourites.indexOf(wall) !== -1) {
+        favouriteState = 'true';
+      }
+
       return (
-        <Card label={wall}>
+        <Card label={wall} className={favouriteState === 'true' ? 'favourite' : ''}>
           <CapacityMeter capacity={this.state.wallData[wall].capacity} count={this.state.wallData[wall].count} />
+          <Favourite onClick={this.setFavourite.bind(this, wall)} favourite={favouriteState} />
         </Card>
       );
     });
 
-    if (cards.length == 0) {
+    if (cards.length === 0) {
       lastUpdatedMessage = <div className="error">No data is available at the moment</div>
     } else {
       lastUpdatedMessage = <p>Last updated: {this.state.updated}<br/>(Data updates every 10 minutes)</p>
@@ -70,6 +121,15 @@ class App extends React.Component {
   // to include the latest data + last refresh time as defined in
   // the JSON object
   fetchData() {
+    // Provide fake data if in a development environment
+    if (process.env.NODE_ENV === 'development') {
+      this.setState({
+        wallData: {"The Reach":{"capacity":165,"count":75,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"},"VauxWest":{"capacity":55,"count":38,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"VauxEast":{"capacity":80,"count":42,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"HarroWall":{"capacity":220,"count":48,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"CroyWall":{"capacity":70,"count":32,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"RavensWall":{"capacity":90,"count":29,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"CanaryWall":{"capacity":43,"count":7,"lastUpdate":"Last updated:&nbspnow  (2:58 PM)"},"Stronghold":{"capacity":50,"count":28,"lastUpdate":"Last updated:&nbsp2 mins ago (2:57 PM)"},"Yonder":{"capacity":68,"count":25,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"},"Climbing Hangar London":{"capacity":35,"count":15,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"}},
+        updated: this.convertDate(1598623178730)
+      });
+      return;
+    }
+
     fetch('/api/walls')
       .then(res => res.json())
       .then(res => this.setState({ wallData: res.walls, updated: this.convertDate(res.refreshed) }));
