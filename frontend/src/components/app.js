@@ -37,8 +37,14 @@ class App extends React.Component {
     return h + ':' + m;
   }
 
+  // Helper function to sort the list based on favourites
   sortFunc(a, b) {
-    if (this.state.favourites.indexOf(a) !== -1 && this.state.favourites.indexOf(b) !== -1) {
+    let aIsFav = (this.state.favourites.indexOf(a) !== -1);
+    let bIsFav = (this.state.favourites.indexOf(b) !== -1);
+
+    // If a and b are both favourites (or both not), then
+    // sort as usual
+    if (aIsFav === bIsFav) {
       if (a > b) {
         return 1;
       }
@@ -48,16 +54,12 @@ class App extends React.Component {
       return 0;
     }
 
-    if (a < b) {
-      if (this.state.favourites.indexOf(b) !== -1) {
-        return 1;
-      }
+    // If either a or b (but not both) are favourites, sort
+    // accordingly
+    if (aIsFav) {
       return -1;
     }
-    if (a > b) {
-      if (this.state.favourites.indexOf(a) !== -1) {
-        return -1;
-      }
+    if (bIsFav) {
       return 1;
     }
 
