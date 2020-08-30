@@ -95,7 +95,7 @@ class App extends React.Component {
       return (
         <Card label={wall} className={favouriteState === 'true' ? 'favourite' : ''}>
           <CapacityMeter capacity={this.state.wallData[wall].capacity} count={this.state.wallData[wall].count} />
-          <Favourite onClick={this.setFavourite.bind(this, wall)} favourite={favouriteState} />
+          <Favourite onClick={this.setFavourite.bind(this, wall)} className={favouriteState === 'true' ? 'favourite' : ''} />
         </Card>
       );
     });

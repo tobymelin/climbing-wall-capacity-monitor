@@ -8,7 +8,7 @@ class Favourite extends React.Component {
     }
 
     returnCharacter() {
-        if (this.props.favourite === 'true') {
+        if (this.props.className.split(' ').indexOf('favourite') !== -1) {
             return '★';
         }
 
@@ -16,7 +16,7 @@ class Favourite extends React.Component {
     }
     render() {
         return (
-            <div className="favourite-marker" onClick={this.props.onClick}>
+            <div className={"favourite-marker " + this.props.className} onClick={this.props.onClick}>
                 {this.returnCharacter()}
             </div>
         );
