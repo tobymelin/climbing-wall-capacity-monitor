@@ -1,9 +1,10 @@
 .card {
     width: 15%;
     float: left;
+    position: relative;
 
-    background-color: #fafafa;
-    border: 1px solid #d0d0d0;
+    background-color: #fcfcfc;
+    border: 1px solid #e0e0e0;
 
     padding: 0.6em 1em 1em 1em;
     margin: 10px 1%;
@@ -32,4 +33,23 @@
     .card {
         width: 100%;
     }
+}
+
+.card .favourite-marker {
+    font-size: 10pt;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    color: #3a9af5;
+    cursor: pointer;
+}
+
+.card .favourite-marker a {
+    color: #3a9af5;
+    text-decoration: none;
+}
+
+.card.favourite {
+    background-color: rgb(253, 255, 227);
+    background-color: aliceblue;
 }
