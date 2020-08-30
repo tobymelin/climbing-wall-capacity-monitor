@@ -8,7 +8,7 @@ class Favourite extends React.Component {
     }
 
     returnCharacter() {
-        if (this.props.className.split(' ').indexOf('favourite') !== -1) {
+        if (this.props.favourite) {
             return '★';
         }
 

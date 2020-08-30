@@ -87,15 +87,15 @@ class App extends React.Component {
 
     // Set up a separate Card + CapacityMeter for each climbing wall
     let cards = walls.map((wall) => {
-      let favouriteState = 'false';
+      let favouriteState = false;
       if (this.state.favourites.indexOf(wall) !== -1) {
-        favouriteState = 'true';
+        favouriteState = true;
       }
 
       return (
-        <Card label={wall} className={favouriteState === 'true' ? 'favourite' : ''}>
+        <Card label={wall} className={favouriteState ? 'favourite' : ''}>
           <CapacityMeter capacity={this.state.wallData[wall].capacity} count={this.state.wallData[wall].count} />
-          <Favourite onClick={this.setFavourite.bind(this, wall)} className={favouriteState === 'true' ? 'favourite' : ''} />
+          <Favourite onClick={this.setFavourite.bind(this, wall)} favourite={favouriteState} />
         </Card>
       );
     });
