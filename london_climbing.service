@@ -1,0 +1,15 @@
+[Unit]
+Description=London Climbing Wall Monitor
+Documentation=https://tobymelin.com/climbing
+After=network.target
+
+[Service]
+Environment=NODE_PORT=3001
+Type=simple
+User=toby
+ExecStart=/usr/bin/node /var/www/climbingmonitor-git/server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
