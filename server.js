@@ -13,7 +13,7 @@ let refreshed = Date.now();
 let hitCounter = 0;
 let refreshRate = 10;
 
-if (process.env.NODE_ENV == 'development') {
+if (process.env.NODE_ENV === 'development') {
     // Refresh rate (minutes)
     refreshRate = 30;
 }
@@ -55,7 +55,7 @@ app.use(express.json());
 app.get('/api/walls', (req, res) => {
     // Super simple hit tracker out of curiosity
     hitCounter += 1;
-    if (hitCounter % 10 == 0) { 
+    if (hitCounter % 10 === 0) { 
         console.log('[' + timeString(Date.now()) + '] ' + hitCounter + ' page hits')
     }
 
