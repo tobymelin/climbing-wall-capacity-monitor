@@ -5,8 +5,9 @@ class CapacityMeter extends React.Component {
     capacityRatio() {
         let fraction = this.props.count / this.props.capacity;
 
-        if (fraction > 1)
+        if (fraction > 1) {
             fraction = 1;
+        }
         
         return fraction;
     }
@@ -22,12 +23,15 @@ class CapacityMeter extends React.Component {
 
         let capacityStyle = 'capacity-percentage';
 
-        if (this.capacityRatio() > 0.75)
+        if (this.capacityRatio() > 0.75) {
             capacityStyle += ' high-capacity';
-        else if (this.capacityRatio() > 0.5)
+        }
+        else if (this.capacityRatio() > 0.5) {
             capacityStyle += ' medium-capacity';
-        else
+        }
+        else {
             capacityStyle += ' low-capacity';
+        }
 
         return (
             <div className='capacity-meter'>

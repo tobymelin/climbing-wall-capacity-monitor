@@ -52,11 +52,6 @@ Runs the React front-end independently of the back-end API.
 
 Runs the back-end API independently of the front-end. The server runs using `nodemon` and will automatically restart after making changes to the code.
 
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `cd frontend && yarn build`
 
 Builds the app for production to the `build` folder.<br />

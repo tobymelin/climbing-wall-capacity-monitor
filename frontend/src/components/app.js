@@ -28,11 +28,8 @@ class App extends React.Component {
   convertDate(epochDate) {
     let date = new Date(epochDate);
 
-    let h = date.getHours();
-    h = (h < 10) ? '0' + h.toString() : h.toString();
-
-    let m = date.getMinutes();
-    m = (m < 10) ? '0' + m.toString() : m.toString();
+    let h = date.getHours().toString().padStart(2, '0');
+    let m = date.getMinutes().toString().padStart(2, '0');
     
     return h + ':' + m;
   }
@@ -102,7 +99,8 @@ class App extends React.Component {
 
     if (cards.length === 0) {
       lastUpdatedMessage = <div className="error">No data is available at the moment</div>
-    } else {
+    }
+    else {
       lastUpdatedMessage = <p>Last updated: {this.state.updated}<br/>(Data updates every 10 minutes)</p>
     }
   
