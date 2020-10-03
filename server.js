@@ -22,11 +22,8 @@ if (process.env.NODE_ENV == 'development') {
 const timeString = (epochDate) => {
     let date = new Date(epochDate);
 
-    let h = date.getHours();
-    h = (h < 10) ? '0' + h.toString() : h.toString();
-
-    let m = date.getMinutes();
-    m = (m < 10) ? '0' + m.toString() : m.toString();
+    let h = date.getHours().toString().padStart(2, '0');
+    let m = date.getMinutes().toString().padStart(2, '0');
     
     return h + ':' + m;
 };
