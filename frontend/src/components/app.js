@@ -3,15 +3,15 @@ import './app.css';
 import CapacityMeter from './capacity-meter.js';
 import Card from './card.js';
 import Favourite from './favourite.js';
-import Storage from '../helpers/storage.js';
+import LocalStorage from '../libraries/localstorage.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    let lsFavourites = Storage.get('favourites') || [];
+    let favouritesList = LocalStorage.get('favourites') || [];
 
-    this.state = { wallData: {}, updated: '-', favourites: [...lsFavourites] };
+    this.state = { wallData: {}, updated: '-', favourites: [...favouritesList] };
   }
 
   // Once component has mounted, fetch data from the API and
@@ -34,8 +34,7 @@ class App extends React.Component {
     return h + ':' + m;
   }
 
-  // Helper function to sort the list based on favourites
-  sortFunc(a, b) {
+  sortClimbingWallsList(a, b) {
     let aIsFav = (this.state.favourites.indexOf(a) !== -1);
     let bIsFav = (this.state.favourites.indexOf(b) !== -1);
 
@@ -75,11 +74,11 @@ class App extends React.Component {
     }
 
     this.setState({ favourites: [...newFavourites] });
-    Storage.set('favourites', this.state.favourites);
+    LocalStorage.set('favourites', this.state.favourites);
   }
 
   render() {
-    const walls = Object.keys(this.state.wallData).sort((a, b) => this.sortFunc(a, b));
+    const walls = Object.keys(this.state.wallData).sort((a, b) => this.sortClimbingWallsList(a, b));
     let lastUpdatedMessage;
 
     // Set up a separate Card + CapacityMeter for each climbing wall

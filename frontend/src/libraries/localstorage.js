@@ -1,4 +1,4 @@
-const Storage = {
+const LocalStorage = {
     get: function (key) {
         return JSON.parse(localStorage.getItem(key));
     },
@@ -7,4 +7,4 @@ const Storage = {
     }
 }
 
-export default Storage;
+export default LocalStorage;
