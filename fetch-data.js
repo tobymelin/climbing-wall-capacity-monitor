@@ -1,6 +1,7 @@
 const got = require('got');
 const cheerio = require('cheerio');
 const config = require('./config');
+const moment = require('moment-timezone');
 
 
 // Data is stored in each widget as an object contained in a 
@@ -9,6 +10,10 @@ const config = require('./config');
 //
 // eslint-disable-next-line no-control-regex
 const jsonRegEx = new RegExp('var data = ({.*}),[^\n]+};.*', 's');
+
+
+// eslint-disable-next-line no-control-regex
+const timeRegEx = /.* \((.*)\)/
 
 
 // Function for parsing widget data. Returns a Promise
@@ -51,6 +56,32 @@ const parseURL = (wallName, dataURL) => {
                     // subLabel as it's not needed anywhere else
                     wallData[label] = jsonData[wallID];
                     delete wallData[label].subLabel;
+
+                    // Parse time string
+                    let timeString = wallData[label].lastUpdate;
+                    timeString = timeString.replace(timeRegEx, '$1');
+
+                    let AmPm = timeString.split(' ')[1].toLowerCase();
+
+                    // Counter pages are served using the walls' local
+                    // time zone. The current local time is therefore used
+                    // as a basis for comparison.
+                    let currentTime = moment.tz('Europe/London');
+                    let currentAmPm = currentTime.format('a');
+
+                    if (currentAmPm !== AmPm) {
+                        if (currentAmPm === 'am') {
+                            currentTime = currentTime.subtract(1, 'days');
+                        }
+                        else {
+                            currentTime = currentTime.add(1, 'days');
+                        }
+                    }
+
+                    timeString = currentTime.format('Y-M-D ') + timeString;
+                    timeObject = moment.tz(timeString, 'YYYY-MM-DD LT', 'Europe/London');
+
+                    wallData[label].lastUpdate = timeObject.toISOString();
                 }
 
                 resolve(wallData);
