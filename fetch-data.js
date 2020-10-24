@@ -69,13 +69,11 @@ const parseURL = (wallName, dataURL) => {
                     let currentTime = moment.tz('Europe/London');
                     let currentAmPm = currentTime.format('a');
 
-                    if (currentAmPm !== AmPm) {
-                        if (currentAmPm === 'am') {
-                            currentTime = currentTime.subtract(1, 'days');
-                        }
-                        else {
-                            currentTime = currentTime.add(1, 'days');
-                        }
+                    // Changed from previous definition, times should only
+                    // be occurring in the past, i.e. no need to add a day
+                    // to the timestamp
+                    if (currentAmPm !== AmPm && currentAmPm === 'am') {
+                        currentTime = currentTime.subtract(1, 'days');
                     }
 
                     timeString = currentTime.format('Y-M-D ') + timeString;
