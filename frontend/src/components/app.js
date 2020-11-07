@@ -96,7 +96,10 @@ class App extends React.Component {
       );
     });
 
-    if (cards.length === 0) {
+    if (Object.keys(this.state).indexOf('maintenance') !== -1 && this.state.maintenance !== '') {
+      lastUpdatedMessage = <div className="error">{this.state.maintenance}</div>
+    }
+    else if (cards.length === 0) {
       lastUpdatedMessage = <div className="error">No data is available at the moment</div>
     }
     else {
@@ -121,17 +124,24 @@ class App extends React.Component {
   // the JSON object
   fetchData() {
     // Provide fake data if in a development environment
-    if (process.env.NODE_ENV === 'development') {
-      this.setState({
-        wallData: {"The Reach":{"capacity":165,"count":75,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"},"VauxWest":{"capacity":55,"count":38,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"VauxEast":{"capacity":80,"count":42,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"HarroWall":{"capacity":220,"count":48,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"CroyWall":{"capacity":70,"count":32,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"RavensWall":{"capacity":90,"count":29,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"CanaryWall":{"capacity":43,"count":7,"lastUpdate":"Last updated:&nbspnow  (2:58 PM)"},"Stronghold":{"capacity":50,"count":28,"lastUpdate":"Last updated:&nbsp2 mins ago (2:57 PM)"},"Yonder":{"capacity":68,"count":25,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"},"Climbing Hangar London":{"capacity":35,"count":15,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"}},
-        updated: this.convertDate(1598623178730)
-      });
-      return;
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //   this.setState({
+    //     wallData: {"The Reach":{"capacity":165,"count":75,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"},"VauxWest":{"capacity":55,"count":38,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"VauxEast":{"capacity":80,"count":42,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"HarroWall":{"capacity":220,"count":48,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"CroyWall":{"capacity":70,"count":32,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"RavensWall":{"capacity":90,"count":29,"lastUpdate":"Last updated:&nbspnow  (2:59 PM)"},"CanaryWall":{"capacity":43,"count":7,"lastUpdate":"Last updated:&nbspnow  (2:58 PM)"},"Stronghold":{"capacity":50,"count":28,"lastUpdate":"Last updated:&nbsp2 mins ago (2:57 PM)"},"Yonder":{"capacity":68,"count":25,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"},"Climbing Hangar London":{"capacity":35,"count":15,"lastUpdate":"Last updated:&nbsp1 min ago (2:58 PM)"}},
+    //     updated: this.convertDate(1598623178730)
+    //   });
+    //   return;
+    // }
 
     fetch('/api/walls')
       .then(res => res.json())
-      .then(res => this.setState({ wallData: res.walls, updated: this.convertDate(res.refreshed) }));
+      .then(res => {
+        if (Object.keys(res).indexOf('maintenance') !== -1) {
+          this.setState({ wallData: {}, maintenance: res.maintenance, updated: this.convertDate(res.refreshed) })
+        }
+        else {
+          this.setState({ wallData: res.walls, updated: this.convertDate(res.refreshed) })
+        }
+      });
   }
 }
 

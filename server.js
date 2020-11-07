@@ -4,6 +4,7 @@
 //
 const express = require('express');
 const fetchData = require('./fetch-data');
+const config = require('./config');
 
 const app = express();
 
@@ -13,7 +14,7 @@ let refreshed = Date.now();
 let hitCounter = 0;
 let refreshRate = 10;
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' || config.maintenanceMode) {
     // Refresh rate (minutes)
     refreshRate = 30;
 }
@@ -46,7 +47,9 @@ const refreshData = () => {
 // Instantly refresh climbing wall data on start
 // and set a timer to run refreshData() every 10 minutes.
 refreshData();
-setInterval(refreshData, 1000*60*refreshRate);
+if (!config.maintenanceMode) {
+    setInterval(refreshData, 1000*60*refreshRate);
+}
 
 // Set up the API to respond to queries to /api/walls.
 // Returns the entire list of climbing walls and the time
@@ -59,7 +62,12 @@ app.get('/api/walls', (req, res) => {
         console.log('[' + timeString(Date.now()) + '] ' + hitCounter + ' page hits')
     }
 
-    res.send({walls: wallData, refreshed});
+    if (config.maintenanceMode) {
+        res.send({maintenance: config.maintenanceMessage, refreshed});
+    }
+    else {
+        res.send({walls: wallData, refreshed});
+    }
 });
 
 if (!module.parent) {
