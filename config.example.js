@@ -5,4 +5,7 @@ const wallKeys = {
 
 const dataURL = 'https://example.com/{key}'
 
-module.exports = { wallKeys, dataURL }
+const maintenanceMode = false;
+const maintenanceMessage = 'Dashboard will be back online once London climbing walls open up again.';
+
+module.exports = { wallKeys, dataURL, maintenanceMessage, maintenanceMode }
