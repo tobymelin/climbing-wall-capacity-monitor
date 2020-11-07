@@ -63,7 +63,7 @@ app.get('/api/walls', (req, res) => {
     }
 
     if (config.maintenanceMode) {
-        res.send({maintenance: config.maintenanceMessage, refreshed});
+        res.send({walls: {}, maintenance: config.maintenanceMessage, refreshed});
     }
     else {
         res.send({walls: wallData, refreshed});
