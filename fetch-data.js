@@ -9,8 +9,9 @@ const moment = require('moment-timezone');
 // that can be parsed by JSON.parse()
 //
 // eslint-disable-next-line no-control-regex
-const jsonRegEx = new RegExp('var data = ({.*}),[^\n]+};.*', 's');
-
+// const jsonRegEx = new RegExp('var data = ({.*}),[^\n]+};.*', 's');
+// const jsonRegEx = new RegExp('var data = ({.*?)(,\s*)*?};.*', 's');
+const jsonRegEx = new RegExp('var data = ({.*?};).*', 's');
 
 // eslint-disable-next-line no-control-regex
 const timeRegEx = /.* \((.*)\)/
@@ -35,7 +36,8 @@ const parseURL = (wallName, dataURL) => {
                 // Rewrite the <script> contents to remove
                 // everything but climber count and rewrite it into
                 // a format parseable by JSON.parse()
-                jsonData = jsonData.replace(jsonRegEx, '$1}');
+                jsonData = jsonData.replace(jsonRegEx, '$1');
+                jsonData = jsonData.replace(/(})?,?\s+};/g, '$1}')
                 jsonData = jsonData.replace(/'/g, '"');
                 jsonData = JSON.parse(jsonData);
 
