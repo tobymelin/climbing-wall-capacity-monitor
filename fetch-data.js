@@ -50,6 +50,14 @@ const parseURL = (wallName, dataURL) => {
                     if (wallID === 'AAA') {
                         label = wallName;
                     }
+                    else if (wallName === 'Stronghold') {
+                        if (wallID === 'LDN') {
+                            label = 'Stronghold Tottenham Hale';
+                        }
+                        else if (wallID === 'LNF') {
+                            label = 'Stronghold London Fields';
+                        }
+                    }
                     else {
                         label = jsonData[wallID]['subLabel'].replace(' Current Climber Count', '');
                     }
