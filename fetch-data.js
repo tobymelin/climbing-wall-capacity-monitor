@@ -44,23 +44,21 @@ const parseURL = (wallName, dataURL) => {
                 let label = '';
 
                 for (let wallID of Object.keys(jsonData)) {
-                    // If wallID hasn't been set properly (wallID === 'AAA'),
+                    // Check manual name overrides from config first,
+                    // otherwise if wallID hasn't been set properly (wallID === 'AAA'),
                     // then use the wallName from wallKeys, otherwise use the
-                    // configured name.
-                    if (wallID === 'AAA') {
-                        label = wallName;
+                    // the counter's configured name.
+                    if (wallName in config.wallNameOverrides && wallID in config.wallNameOverrides[wallName]) {
+                        label = config.wallNameOverrides[wallName][wallID];
                     }
-                    else if (wallName === 'Stronghold') {
-                        if (wallID === 'LDN') {
-                            label = 'Stronghold Tottenham Hale';
-                        }
-                        else if (wallID === 'LNF') {
-                            label = 'Stronghold London Fields';
-                        }
+                    else if (wallID === 'AAA') {
+                        label = wallName;
                     }
                     else {
                         label = jsonData[wallID]['subLabel'].replace(' Current Climber Count', '');
                     }
+
+                    console.log(wallName + ': ' + wallID);
 
                     // Add info to the wallData object and delete the
                     // subLabel as it's not needed anywhere else

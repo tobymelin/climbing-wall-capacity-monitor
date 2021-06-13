@@ -8,4 +8,15 @@ const dataURL = 'https://example.com/{key}'
 const maintenanceMode = false;
 const maintenanceMessage = 'Dashboard will be back online once London climbing walls open up again.';
 
-module.exports = { wallKeys, dataURL, maintenanceMessage, maintenanceMode }
+// Used to manually replace wall names if not correctly set by the wall
+const wallNameOverrides = {
+    'wallName': {
+        'wallID1': 'Manual name here',
+        'wallID2': 'Another manual name'
+    },
+    'wallName2': {
+        'wallID1': 'And a third one'
+    }
+}
+
+module.exports = { wallKeys, dataURL, maintenanceMode, maintenanceMessage, wallNameOverrides }
