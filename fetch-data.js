@@ -58,8 +58,6 @@ const parseURL = (wallName, dataURL) => {
                         label = jsonData[wallID]['subLabel'].replace(' Current Climber Count', '');
                     }
 
-                    console.log(wallName + ': ' + wallID);
-
                     // Add info to the wallData object and delete the
                     // subLabel as it's not needed anywhere else
                     wallData[label] = jsonData[wallID];
