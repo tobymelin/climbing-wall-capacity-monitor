@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Facility Counter</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="data_files/jquery-1.12.4.min.js"></script>
+    <script src="data_files/gauge.min.js"></script>
+
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            background-color: #262746;
+        }
+
+        #main-gauge {
+
+            width: 250px;
+            height: 100px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        #header-label {
+            font-size: x-large;
+            margin-bottom: 5px;
+        }
+
+        #facility-sub-label {
+            font-size: medium;
+            margin-bottom: 10px;
+        }
+
+        #facility-count {
+            font-size: large;
+            text-align: center;
+        }
+
+        #gauge {
+            width: 248px;
+            height: 98px;
+        }
+
+        #gym-switcher {
+            text-align: center;
+            border: 1px solid black;
+            margin-bottom: 10px;
+            font-size: medium;
+        }
+
+        #last-update {
+            margin-top: 3px;
+            font-size: x-small;
+            font-style: italic;
+        }
+
+
+    </style>
+</head>
+
+<body bgcolor="#262746">
+
+
+<div id="main-gauge">
+
+    
+    
+    <div id="main-content">
+        <div id="facility-sub-label" style="display: none;"></div>
+        <div id="facility-count">
+            <span id="count" style="display:inline">248</span>&nbsp;
+            <span id="capacity" style="display:none">of 348</span>
+            <span id="visitor" style="display:inline">currently climbing</span></div>
+
+        <canvas id="gauge" style="display: block; width: 248px; height: 98px;" width="496" height="196"></canvas>
+        <div id="last-update">Last updated:&nbsp;now  (3:44 PM)</div>
+    </div>
+</div>
+
+<script>
+
+    var data = {
+        'AAA' : { 
+    'capacity' : 348,
+    'count' : 248,
+    'subLabel' : '',
+    'lastUpdate' : 'Last updated:&nbspnow  (3:44 PM)'
+},    };
+
+    function showGym(tag) {
+
+                tag=Object.keys(data)[0];        
+        
+        if (!tag) {
+            $('#main-content').hide();
+            return;
+        } else {
+            $('#main-content').show();
+        }
+        var dataElement = data[tag];
+        if (!dataElement) {
+            return;
+        }
+
+        var opts = {
+            angle: 0.10, // The span of the gauge arc
+            lineWidth: 0.44, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.6, // // Relative to gauge radius
+                strokeWidth: 0.035, // The thickness
+                color: '#cf6060' // Fill color
+            },
+            limitMax: false,     // If false, max value increases automatically if value > maxValue
+            limitMin: false,     // If true, the min value of the gauge will be fixed
+            colorStop: '#009757',    // just experiment with them
+            strokeColor: '#e0e0e0',  // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true,     // High resolution support
+        };
+        var target = document.getElementById('gauge'); // your canvas element
+        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        gauge.setTextField(document.getElementById("count"));
+        gauge.maxValue = dataElement.capacity; // set max gauge value
+        gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+        gauge.animationSpeed = 32; // set animation speed (32 is default value)
+        gauge.set(dataElement.count); // set actual value
+
+        if (dataElement.count === 1) {
+            $('#visitor').html('currently climbing');
+        } else {
+            $('#visitor').html('currently climbing');
+        }
+
+        if (dataElement.subLabel && dataElement.subLabel.length > 0) {
+            $('#facility-sub-label').html(dataElement.subLabel).show();
+        } else {
+            $('#facility-sub-label').hide();
+        }
+
+        $('#facility-sub-label').html(dataElement.subLabel);
+
+        $('#last-update').html(dataElement.lastUpdate);
+
+        if (true) {
+             $('#capacity').html("of " + dataElement.capacity);
+        } else {
+             $('#capacity').html("max " + dataElement.capacity);
+        }
+    };
+
+    showGym('');
+
+    $('#gym-switcher').change(function () {
+        var tag = $('#gym-switcher').val();
+        showGym(tag);
+    });
+</script>
+
+<script>
+    var last_iframe_main_box_height = 0;
+
+$( document ).ready(function() {
+    broadcastIFrameMainBoxHeightResize();
+
+        
+});
+
+function getIframeHeight() {
+    var hgt = $('#main-content').height() + $('#header-label').height() + ( $('#gym-switcher').height() * 1.5);   
+    return hgt;
+}
+
+function broadcastIFrameMainBoxHeightResize()
+{
+
+    // use try/catch so it doesn't cause IE7 to crash
+    try {
+        var newheight=getIframeHeight() + 15;    
+        // console.log(newheight);       
+        if (last_iframe_main_box_height!=newheight) {
+            parent.postMessage("rgpmessage-iframe-resize,"+newheight+","+'occupancyCounter',"*");
+            last_iframe_main_box_height=newheight;
+        }
+    }
+    catch (err) {
+    }
+}
+</script>
+
+
+</body></html>
