@@ -3,7 +3,7 @@
 // RockGymPro widgets.
 import express from 'express';
 import fetchData from './fetch-data.js';
-import * as config from './config.js';
+import config from './config.js';
 
 const app = express();
 

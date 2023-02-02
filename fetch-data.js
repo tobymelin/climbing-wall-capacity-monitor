@@ -1,7 +1,7 @@
 import got from 'got';
 import * as cheerio from 'cheerio';
 import moment from 'moment-timezone';
-import * as config from './config.js';
+import config from './config.js';
 
 // Data is stored in each widget as an object contained in a
 // <script> tag. This RegEx extracts the object in a format
@@ -25,6 +25,9 @@ const parseURL = (wallName, dataURL) => {
 
     got(dataURL)
       .then((res) => {
+        if (res === undefined || !('body' in res))
+          resolve(wallData);
+
         const $ = cheerio.load(res.body);
 
         // Find the third <script> tag on the widget website

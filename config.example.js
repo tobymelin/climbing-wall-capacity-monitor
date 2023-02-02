@@ -19,3 +19,13 @@ export const wallNameOverrides = {
     }
 }
 
+const config = {
+  wallKeys,
+  dataURL,
+  maintenanceMode,
+  maintenanceMessage,
+  wallNameOverrides,
+}
+
+export default config
+
