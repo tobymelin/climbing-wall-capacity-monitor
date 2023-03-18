@@ -4,6 +4,9 @@
 import express from 'express';
 import fetchData from './fetch-data.js';
 import config from './config.js';
+import validateConfig from './validation.js';
+
+validateConfig(config);
 
 const app = express();
 
@@ -58,7 +61,7 @@ app.get('/api/walls', (_, res) => {
   // Super simple hit tracker out of curiosity
   hitCounter += 1;
   if (hitCounter % 10 === 0) {
-    console.log('[' + timeString(Date.now()) + '] ' + hitCounter + ' page hits')
+    console.log('[' + timeString(Date.now()) + '] ' + hitCounter + ' page hits');
   }
 
   if (config.maintenanceMode) {
